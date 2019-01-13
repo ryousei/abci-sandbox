@@ -1,0 +1,21 @@
+Bootstrap: docker
+From: ubuntu:latest
+
+%environment
+
+    export XDG_RUNTIME_DIR=""
+
+%runscript
+
+    # /global is the mount point of a group directory.
+    rm -f global
+    ln -s /fs2/groups2 global
+    jupyter-lab --ip=0.0.0.0 --no-browser 
+
+%post
+
+    apt-get update
+    apt-get install -y python3
+    apt-get install -y python3-pip
+
+    pip3 install jupyterlab
