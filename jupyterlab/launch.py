@@ -1,9 +1,9 @@
 import argparse
 import configparser
 from pathlib import Path
-import sys
-import subprocess
 import pexpect
+import subprocess
+import sys
 from time import sleep
 
 CONFIG_FILE = "config.ini"

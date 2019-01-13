@@ -1,9 +1,9 @@
 import argparse
 import configparser
 from pathlib import Path
-import sys
-import subprocess
 import pexpect
+import subprocess
+import sys
 from time import sleep
 
 CONFIG_FILE = "config.ini"
@@ -39,7 +39,6 @@ if __name__ == "__main__":
     local_port = int(config['Common']['local_port']) + int(session)
     conn.expect(PROMPT)
 
-
     print("Setting up an SSH tunnel...")
     proc = subprocess.Popen(["ssh", "-N", "-L", "{}:{}:{}".format(local_port, node, port), "abci"])
     sleep(1)
@@ -47,6 +46,7 @@ if __name__ == "__main__":
     print("Launching a VNC client...")
     subprocess.call(["open", "vnc://127.0.0.1:{}/".format(local_port)])
 
+    print("NOTE: Now you are on {}.".format(node))
     print("NOTE: don't forget to terminate vncserver. Run \"vncserver -kill :{}\" before logout this session.".format(session))
     while True:
         try:
