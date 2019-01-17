@@ -1,0 +1,56 @@
+Bootstrap: docker
+From: ubuntu:16.04
+
+%environment
+
+    export XDG_RUNTIME_DIR=""
+
+%runscript
+
+    # /global is the mount point of a group directory.
+    rm -f global
+    ln -s /fs2/groups2 global
+    export PYTHONUSERBASE="$HOME/.singularity/local"
+    export PATH=/usr/local/cuda/bin:$PATH
+    export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
+    jupyter-lab --ip=0.0.0.0 --no-browser 
+
+%post
+
+    # Install basic packages
+    apt update
+    apt install -y git
+    apt install -y python3
+    apt install -y python3-pip
+    apt install -y curl
+
+    apt autoremove -y
+    apt clean
+
+    # Install CUDA 9.0
+    apt-key adv --fetch-keys http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x86_64/7fa2af80.pub
+    curl -O http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x86_64/cuda-repo-ubuntu1604_9.0.176-1_amd64.deb
+    dpkg -i cuda-repo-ubuntu1604_9.0.176-1_amd64.deb
+    apt update
+    apt install -y cuda-9-0
+    rm cuda-repo-ubuntu1604_9.0.176-1_amd64.deb
+
+    # Install cuDNN 7.1
+    curl -O http://developer.download.nvidia.com/compute/redist/cudnn/v7.1.4/cudnn-9.0-linux-x64-v7.1.tgz
+    tar xzf cudnn-9.0-linux-x64-v7.1.tgz
+    cp -a cuda/lib64/* /usr/local/lib/
+    cp -a cuda/include/* /usr/local/include/
+    ldconfig
+    rm -R -f cuda cudnn-9.0-linux-x64-v7.1.tgz
+
+    # Install Python packages
+    pip3 install jupyterlab
+    pip3 install numpy
+    pip3 install matplotlib
+    pip3 install keras
+    pip3 install tensorflow
+    pip3 install tensorflow-gpu
+    pip3 install pandas
+    pip3 install seaborn
+    pip3 install sklearn
+
