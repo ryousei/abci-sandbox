@@ -10,12 +10,24 @@ From: ubuntu:latest
     # /global is the mount point of a group directory.
     rm -f global
     ln -s /fs2/groups2 global
+    export PYTHONUSERBASE="$HOME/.singularity/local"
     jupyter-lab --ip=0.0.0.0 --no-browser 
 
 %post
 
     apt-get update
+    apt-get install -y nvidia-cuda-toolkit nvidia-driver-390
     apt-get install -y python3
     apt-get install -y python3-pip
 
     pip3 install jupyterlab
+    pip3 install numpy
+    pip3 install matplotlib
+    pip3 install keras
+    pip3 install tensorflow
+    pip3 install tensorflow-gpu
+    pip3 install pandas
+    pip3 install seaborn
+    pip3 install sklearn
+    pip3 install cupy
+    pip3 install chainer
