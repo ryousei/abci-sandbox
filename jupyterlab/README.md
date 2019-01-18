@@ -26,8 +26,17 @@ optional arguments:
 ### How to build a singularity image on macOS
 
 - Vagrant (VirtualBox)
+
   - See https://singularity.lbl.gov/install-mac
+
 - Docker
+
+  - See https://github.com/kaczmarj/singularity-in-docker
+
+    ```shell
+    $ docker run --rm --privileged -v $(pwd):/work kaczmarj/singularity:2.6.1 \
+      build ubuntu16.04.simg ubuntu16.04.recipe
+    ```
 
 
 
