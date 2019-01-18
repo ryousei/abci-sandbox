@@ -10,7 +10,7 @@ CONFIG_FILE = "config.ini"
 PROMPT = r"\[\w+@\w+ \S+\].*"
 
 QRSH_CMD = "qrsh -g {} -l {}"
-JUPYTER_URI = "http://\(([\w]+\.abci\.local) or 127\.0\.0\.1\):{}/\?token=(\w+)"
+JUPYTER_URI = "http://\(([\w]+\.abci\.local) or 127\.0\.0\.1\):(\d+)/\?token=(\w+)"
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -42,16 +42,17 @@ if __name__ == "__main__":
     cmd = config[args.mode]['main']
     print("    {}".format(cmd))
     conn.sendline(cmd)
-    conn.expect(JUPYTER_URI.format(config['Common']['port']))
+    conn.expect(JUPYTER_URI)
     node = conn.match.group(1).decode('utf-8')
-    token = conn.match.group(2).decode('utf-8')
+    port = conn.match.group(2).decode('utf-8')
+    token = conn.match.group(3).decode('utf-8')
 
     print("Setting up an SSH tunnel...")
-    proc = subprocess.Popen(["ssh", "-N", "-L", "{}:{}:{}".format(config['Common']['local_port'], node, config['Common']['port']), "abci"])
+    proc = subprocess.Popen(["ssh", "-N", "-L", "{}:{}:{}".format(config['Common']['port'], node, port), "abci"])
     sleep(1)
 
     print("Launching a web browser...")
-    subprocess.call(["open", "http://127.0.0.1:{}/?token={}".format(config['Common']['local_port'], token)])
+    subprocess.call(["open", "http://127.0.0.1:{}/?token={}".format(config['Common']['port'], token)])
 
     print("Jupyter Lab is running...")
     while True:
