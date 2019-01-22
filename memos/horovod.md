@@ -1,6 +1,6 @@
 ## Horovod
 
-### Getting start on ABCI
+### Getting started on ABCI
 
 1. Install Horovod on venv environment.
 
@@ -18,7 +18,7 @@
    $ pip install horovod
    ```
 
-   * Note: openmpi/3.x module does not support CUDA.
+   * Note: openmpi/3.x module does not currently support CUDA.
 
 2. Run an example script on a machine with 4 GPUs.
 
@@ -81,6 +81,22 @@
          -mca pml ob1 -mca btl openib \
          python sw/horovod/examples/keras_mnist.py
      ```
+
+### Benchmark
+
+1. Clone the benchmark script. Note: we should use a branch corresponding to the version of TensorFlow.
+
+   ```bash
+   $ git clone https://github.com/tensorflow/benchmarks
+   $ cd benchmarks
+   $ git fetch
+   $ git checkout -b cnn_tf_v1.12_compatible origin/cnn_tf_v1.12_compatible
+   $ git branch
+   * cnn_tf_v1.12_compatible
+     master
+   ```
+
+2. Run the benchmark.
 
 ### References
 
